@@ -37,11 +37,58 @@ function Book() {
     });
   }
 
-  createTable().then(() => {
-    console.log("\nCreating mock data for Books...\n");
+  const createOneBook = (book) => {
+    const createOne = `
+      INSERT INTO books (book)
+      VALUES ($1)
+      RETURNING *;
+    `;
 
-    mockData();
-  });
+    return db
+      .query(createOne, [book])
+      .then((result) => result.rows[0])
+      .catch(console.error);
+  }
+
+  const getAll = (res) => {
+    const getAll = `
+      SELECT *
+        FROM books;
+    `;
+  
+    return db 
+      .query(getAll)
+      .then((result) => result.rows)
+      .catch(console.error);
+    }
+
+  const getOneById = (id, res) => {
+    const getOneById = `
+      SELECT * 
+      FROM books
+      WHERE id = $1;
+    `;
+
+    return db
+      .query(getOneById, [id])
+      .then((result) => result.rows[0])
+      .catch(console.error);
+  }
+
+  const init = () => {
+    createTable().then(() => {
+      console.log("\nCreating mock data for Books...\n");
+  
+      mockData();
+    });
+  }
+
+  return {
+    createOneBook,
+    getOneById,
+    getAll,
+    init
+  };
 }
 
 module.exports = Book;

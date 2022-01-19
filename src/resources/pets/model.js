@@ -37,11 +37,58 @@ function Pet() {
     });
   }
 
-  createTable().then(() => {
-    console.log("\nCreating mock data for Pets...\n");
+  const createOnePet = (pet) => {
+    const createOne = `
+      INSERT INTO pets (pet)
+      VALUES ($1)
+      RETURNING *;
+    `;
 
-    mockData();
-  });
+    return db
+      .query(createOne, [pet])
+      .then((result) => result.rows[0])
+      .catch(console.error);
+  }
+
+  const getAll = (res) => {
+    const getAll = `
+      SELECT *
+        FROM pets;
+    `;
+  
+    return db 
+      .query(getAll)
+      .then((result) => result.rows)
+      .catch(console.error);
+    }
+
+  const getOneById = (id, res) => {
+    const getOneById = `
+      SELECT * 
+      FROM pets
+      WHERE id = $1;
+    `;
+
+    return db
+      .query(getOneById, [id])
+      .then((result) => result.rows[0])
+      .catch(console.error);
+  }
+
+  const init = () => {
+    createTable().then(() => {
+      console.log("\nCreating mock data for Pets...\n");
+  
+      mockData();
+    });
+  }
+
+  return {
+    createOnePet,
+    getOneById,
+    getAll,
+    init
+  };
 }
 
 module.exports = Pet;

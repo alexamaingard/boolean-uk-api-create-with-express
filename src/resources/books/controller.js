@@ -7,7 +7,7 @@ const createOne = async (req, res) => {
   };
 
   const createABook = Book().createOneBook;
-  const thisRes = await createABook(bookToCreate.name, res);
+  const thisRes = await createABook(bookToCreate, res);
   return res.json({ data: thisRes });
 }
 

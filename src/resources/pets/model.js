@@ -39,13 +39,14 @@ function Pet() {
 
   const createOnePet = (pet) => {
     const createOne = `
-      INSERT INTO pets (pet)
-      VALUES ($1)
-      RETURNING *;
+      INSERT INTO pets
+        (name, age, type, breed, microchip)
+      VALUES
+        ($1, $2, $3, $4, $5) RETURNING *;
     `;
 
     return db
-      .query(createOne, [pet])
+      .query(createOne, Object.values(pet))
       .then((result) => result.rows[0])
       .catch(console.error);
   }

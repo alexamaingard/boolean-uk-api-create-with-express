@@ -39,13 +39,14 @@ function Book() {
 
   const createOneBook = (book) => {
     const createOne = `
-      INSERT INTO books (book)
-      VALUES ($1)
-      RETURNING *;
+      INSERT INTO books
+        (title, type, author, topic, publicationDate)
+      VALUES
+        ($1, $2, $3, $4, $5) RETURNING *;
     `;
 
     return db
-      .query(createOne, [book])
+      .query(createOne, Object.values(book))
       .then((result) => result.rows[0])
       .catch(console.error);
   }

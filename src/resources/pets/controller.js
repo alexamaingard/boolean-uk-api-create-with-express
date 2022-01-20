@@ -7,7 +7,7 @@ const createOne = async (req, res) => {
   };
 
   const createOne = Pet().createOnePet;
-  const thisRes = await createOne(petToCreate.name, res);
+  const thisRes = await createOne(petToCreate, res);
   return res.json({ data: thisRes });
 }
 
